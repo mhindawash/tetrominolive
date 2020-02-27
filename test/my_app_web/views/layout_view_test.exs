@@ -1,3 +1,3 @@
-defmodule MyAppWeb.LayoutViewTest do
-  use MyAppWeb.ConnCase, async: true
+defmodule TetroWeb.LayoutViewTest do
+  use TetroWeb.ConnCase, async: true
 end

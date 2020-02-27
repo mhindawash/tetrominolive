@@ -1,9 +1,9 @@
-defmodule MyApp.MixProject do
+defmodule Tetro.MixProject do
   use Mix.Project
 
   def project do
     [
-      app: :my_app,
+      app: :tetro,
       version: "0.1.0",
       elixir: "~> 1.5",
       elixirc_paths: elixirc_paths(Mix.env()),
@@ -19,7 +19,7 @@ defmodule MyApp.MixProject do
   # Type `mix help compile.app` for more information.
   def application do
     [
-      mod: {MyApp.Application, []},
+      mod: {Tetro.Application, []},
       extra_applications: [:logger, :runtime_tools]
     ]
   end

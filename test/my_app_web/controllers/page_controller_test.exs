@@ -1,5 +1,5 @@
-defmodule MyAppWeb.PageControllerTest do
-  use MyAppWeb.ConnCase
+defmodule TetroWeb.PageControllerTest do
+  use TetroWeb.ConnCase
 
   test "GET /", %{conn: conn} do
     conn = get(conn, "/")

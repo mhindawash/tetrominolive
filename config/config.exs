@@ -7,15 +7,15 @@
 # General application configuration
 use Mix.Config
 
-config :my_app,
-  ecto_repos: [MyApp.Repo]
+config :tetro,
+  ecto_repos: [Tetro.Repo]
 
 # Configures the endpoint
-config :my_app, MyAppWeb.Endpoint,
+config :tetro, TetroWeb.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "moPCNuBiEFuE8xooIWKR1XmYFIH45wpns1qA/z6aEWAZV5I6nKHAQcIWkDWeG5H3",
-  render_errors: [view: MyAppWeb.ErrorView, accepts: ~w(html json)],
-  pubsub: [name: MyApp.PubSub, adapter: Phoenix.PubSub.PG2],
+  render_errors: [view: TetroWeb.ErrorView, accepts: ~w(html json)],
+  pubsub: [name: Tetro.PubSub, adapter: Phoenix.PubSub.PG2],
   live_view: [
     signing_salt: "sSjLpHWHZch6acCNNl/PnjRYFedLNFo8"
   ]

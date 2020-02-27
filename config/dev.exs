@@ -1,10 +1,10 @@
 use Mix.Config
 
 # Configure your database
-config :my_app, MyApp.Repo,
+config :tetro, Tetro.Repo,
   username: "postgres",
-  password: "postgres",
-  database: "my_app_dev",
+  password: "cheko1218",
+  database: "",
   hostname: "localhost",
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
@@ -15,7 +15,7 @@ config :my_app, MyApp.Repo,
 # The watchers configuration can be used to run external
 # watchers to your application. For example, we use it
 # with webpack to recompile .js and .css sources.
-config :my_app, MyAppWeb.Endpoint,
+config :tetro, TetroWeb.Endpoint,
   http: [port: 4000],
   debug_errors: true,
   code_reloader: true,
@@ -55,14 +55,14 @@ config :my_app, MyAppWeb.Endpoint,
 # different ports.
 
 # Watch static and templates for browser reloading.
-config :my_app, MyAppWeb.Endpoint,
+config :tetro, TetroWeb.Endpoint,
   live_reload: [
     patterns: [
       ~r"priv/static/.*(js|css|png|jpeg|jpg|gif|svg)$",
       ~r"priv/gettext/.*(po)$",
-      ~r"lib/my_app_web/{live,views}/.*(ex)$",
-      ~r"lib/my_app_web/templates/.*(eex)$",
-      ~r{lib/my_app_web/live/.*(ex)$}
+      ~r"lib/tetro_web/{live,views}/.*(ex)$",
+      ~r"lib/tetro_web/templates/.*(eex)$",
+      ~r{lib/tetro_web/live/.*(ex)$}
     ]
   ]
 

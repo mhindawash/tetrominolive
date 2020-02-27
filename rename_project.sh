@@ -2,8 +2,8 @@
 
 set -e
 
-CURRENT_NAME="MyApp"
-CURRENT_OTP="my_app"
+CURRENT_NAME="Tetro"
+CURRENT_OTP="tetro"
 
 NEW_NAME="NewProject"
 NEW_OTP="new_project"
