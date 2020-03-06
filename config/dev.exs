@@ -4,7 +4,7 @@ use Mix.Config
 config :tetro, Tetro.Repo,
   username: "postgres",
   password: "cheko1218",
-  database: "",
+  database: "postgres",
   hostname: "localhost",
   show_sensitive_data_on_connection_error: true,
   pool_size: 10

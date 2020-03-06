@@ -9,8 +9,7 @@ defmodule Tetro.Points do
     |> Enum.map( fn point -> Point.move(point, location) end)
   end
   def with_color(points, color) do
-      Enum.map(points, fn point -> add_color(point, color)
-    end)
+      Enum.map(points, fn point -> add_color(point, color) end)
   end
   defp add_color({_x, _y, _c}=point, _color) do
     point

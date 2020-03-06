@@ -3,8 +3,8 @@ use Mix.Config
 # Configure your database
 config :tetro, Tetro.Repo,
   username: "postgres",
-  password: "postgres",
-  database: "",
+  password: "cheko1218",
+  database: "postgres",
   hostname: "localhost",
   pool: Ecto.Adapters.SQL.Sandbox
 

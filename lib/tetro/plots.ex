@@ -1,6 +1,6 @@
 defmodule Tetro.Plots do
-  def shape(:i) do
-    # the long I shape
+  def points(:i) do
+    # the long I points
     [
       {2,1},
       {2,2},
@@ -8,45 +8,45 @@ defmodule Tetro.Plots do
       {2,4}
     ]
   end
-  def shape(:l) do
-    # the L shape to the right
+  def points(:l) do
+    # the L points to the right
     [
       {2,1},
       {2,2},
       {2,3}, {3,3}
     ]
   end
-  def shape(:j) do
-    # the L shape to the left
+  def points(:j) do
+    # the L points to the left
     [
             {3,1},
             {3,2},
       {2,3},{3,3}
     ]
   end
-  def shape(:o) do
-    # the [](O) shape, aka box
+  def points(:o) do
+    # the [](O) points, aka box
     [
       {2,1},{3,1},
       {2,2},{3,2}
     ]
   end
-  def shape(:z) do
-    # the Z shape facing left
+  def points(:z) do
+    # the Z points facing left
     [
       {2,1},{3,1},
             {3,2},{4,2}
     ]
   end
-  def shape(:s) do
-    # the Z shape facing right
+  def points(:s) do
+    # the Z points facing right
     [
             {3,1},{4,1},
       {2,2},{3,2}
     ]
   end
-  def shape(:t) do
-    # the T shape
+  def points(:t) do
+    # the T points
     [
       {2,1},{3,1},{4,1},
             {3,2}

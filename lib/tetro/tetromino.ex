@@ -10,7 +10,7 @@ defmodule Tetro.Tetromino do
     [0,90,180,270]
     |> Enum.random
   end
-  def random do #random tetris piece spawn
+  def random_brick do #random tetris piece spawn
     shape = random_shape()
     rotation = random_rotation()
     %__MODULE__{
@@ -19,11 +19,11 @@ defmodule Tetro.Tetromino do
       rotation: rotation
     }
   end
-  def new_tetromino(shape, location, rotation) do #single piece of tetris for testing
+  def new_tetromino do #single piece of tetris for testing
     %__MODULE__{
-      shape: shape,
-      location: location,
-      rotation: rotation
+      shape: :i,
+      rotation: 90,
+      location: {3,1}
     }
   end
 
@@ -39,14 +39,14 @@ defmodule Tetro.Tetromino do
   def rotation(tetromino) do #action to rotate the tetris piece
     %{tetromino| rotation: rotate(tetromino.rotation)}
   end
-  def rotate(0), do: 0
+  def rotate(270), do: 0
   # above code is the math to not rotate the tetris piece
   def rotate(degrees), do: degrees + 90
       # above code is the math to rotate the tetris piece
   def prepare_points(tetromino) do #the steps to move all points not a single point
     tetromino.shape
+    |> Tetro.Plots.points()
     |> Tetro.Points.rotate(tetromino.rotation)
     |> Tetro.Points.move(tetromino.location)
   end
-
 end
