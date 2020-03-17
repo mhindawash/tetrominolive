@@ -101,6 +101,7 @@ defmodule TetroWeb.GameLive do
     points =
       tetromino
       |> Tetromino.prepare_points
+      |> Tetro.Points.move(tetromino.location)
       |> Tetro.Points.with_color(color(tetromino))
 
     assign(socket, brick: points)

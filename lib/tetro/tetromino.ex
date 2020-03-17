@@ -1,5 +1,6 @@
 defmodule Tetro.Tetromino do
   defstruct [:shape, :location, :rotation]
+  alias Tetro.{Point, Plots, Points}
 
   def random_shape do
     [:i,:l,:j,:o,:z,:s,:t]
@@ -28,25 +29,27 @@ defmodule Tetro.Tetromino do
   end
 
   def left(tetromino) do #action to move tetris piece left
-    %{tetromino| location: Tetro.Point.left(tetromino.location)}
+    %{tetromino| location: Point.left(tetromino.location)}
   end
   def right(tetromino) do #action to move tetris piece right
-    %{tetromino| location: Tetro.Point.right(tetromino.location)}
+    %{tetromino| location: Point.right(tetromino.location)}
   end
   def down(tetromino) do #action to move tetris piece down
-    %{tetromino| location: Tetro.Point.down(tetromino.location)}
+    %{tetromino| location: Point.down(tetromino.location)}
   end
   def rotation(tetromino) do #action to rotate the tetris piece
     %{tetromino| rotation: rotate(tetromino.rotation)}
+    |> IO.inspect(label: "************")
   end
   def rotate(270), do: 0
   # above code is the math to not rotate the tetris piece
   def rotate(degrees), do: degrees + 90
       # above code is the math to rotate the tetris piece
-  def prepare_points(tetromino) do #the steps to move all points not a single point
+  def prepare_points(tetromino) do
+     #the steps to move all points not a single point
     tetromino.shape
-    |> Tetro.Plots.points()
-    |> Tetro.Points.rotate(tetromino.rotation)
-    |> Tetro.Points.move(tetromino.location)
+    # IO.inspect(tetromino.shape, label: "**************PP")
+    |> Plots.points()
+    |> Points.rotate(tetromino.rotation)
   end
 end
