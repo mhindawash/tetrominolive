@@ -23,7 +23,7 @@ defmodule Tetro.Bottom do
       |> Enum.into(bottom)
   end
   def collides?(bottom, {x, y}) do
-    !!Map.get(bottom, {x,y}) || x < 0 || x > 10 || y > 20
+    !!Map.get(bottom, {x,y}) || x < 1 || x > 10 || y > 20
   end
   def collides?(bottom, {x,y, _color}) do
     collides?(bottom, {x,y})

@@ -7,15 +7,16 @@ defmodule TetroWeb.GameLive do
   @box_height 20
 
   def mount(_session, socket) do
-    # :timer.send_interval 250, self(), :tick
+    :timer.send_interval 250, self(), :tick
 
-    {:ok, new_game(socket)}
+    {:ok, start_game(socket)}
   end
   def begin_svg() do
     """
-    <div style="background-color:white;">
+    <div">
       <svg
       version="1.0"
+      style="background-color: #d5eff7"
       id="Layer_1"
       xmlns="http://www.w3.org/2000/svg"
       xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -68,20 +69,37 @@ defmodule TetroWeb.GameLive do
     {(x-1) * @box_width, (y-1) * @box_height}
   end
 
-  def render(assigns) do
+  def render(%{state: :playing}=assigns) do
     ~L"""
       <div phx-keydown="keydown" phx-target="window">
+      <h2 style="color: white;">
+        Score: <%= @score %>
+        State: <%= @state %>
+      </h2>
         <body style="background-color:black;">
           <%= raw begin_svg() %>
-            <%= raw boxes(@brick) %>
+          <%= raw boxes(@brick) %>
+          <%= raw boxes(Map.values(@bottom)) %>
           <%= raw end_svg() %>
         </body>
-        <h2 style="color: white;">
-          Score: <%= @score %>
-          State: <%= @state %>
-        </h2>
-        <h2 style="color:white;"><%= inspect(@tetromino) %></h2>
       </div>
+    """
+  end
+  def render(%{state: :starting}=assigns) do
+    ~L"""
+      <h1 style="color: white;">Let's play Tetris!</h1>
+      <body style="background-color:black;">
+      <button phx-click="start">Start</button>
+      </body>
+    """
+  end
+  def render(%{state: :game_over}=assigns) do
+    ~L"""
+      <h1 style="color: white;"> Game Over </h1>
+      <h2 style="color: white;"> You're score: <%= @score %></h2>
+      <body style="background-color:black;">
+      <button phx-click="start">Play Again!</button
+      </body>
     """
   end
 
@@ -106,10 +124,14 @@ defmodule TetroWeb.GameLive do
 
     assign(socket, brick: points)
   end
-
+  defp start_game(socket) do
+    assign(socket,
+        state: :starting
+    )
+  end
   defp new_game(socket) do
     assign(socket,
-        state: :player,
+        state: :playing,
         score: 0,
         bottom: %{}
     )
@@ -155,11 +177,28 @@ defmodule TetroWeb.GameLive do
     :grey
   end
 
-  def drop(socket) do
+  def drop(:playing, socket, fast) do
+    old_tetromino = socket.assigns.tetromino
+
+    response =
+      Tetris.move_down(
+      old_tetromino,
+      socket.assigns.bottom,
+      color(old_tetromino))
+
+    bonus = if fast, do: 2, else: 0
+
     socket
-    |> assign(tetromino: socket.assigns.tetromino |> Tetro.Tetromino.down)
+    |> assign(
+      tetromino: response.tetromino,
+      bottom: response.bottom,
+      score: socket.assigns.score + response.score + bonus,
+      state: (if response.game_over, do: :game_over, else: :playing)
+      )
     |> show
   end
+  def drop(_not_playing, socket, _not_fast), do: socket
+
 
   def move(direction, socket) do
     socket
@@ -186,20 +225,25 @@ defmodule TetroWeb.GameLive do
     |> Tetris.try_right(socket.assigns.bottom))
   end
 
-  def handle_event("keydown", %{"key" => "ArrowDown"}, socket) do
-    {:noreply, drop(socket)}
-  end
   def handle_event("keydown", %{"key" => "ArrowRight"}, socket) do
     {:noreply, move(:right, socket)}
   end
   def handle_event("keydown", %{"key" => "ArrowLeft"}, socket) do
     {:noreply, move(:left, socket)}
   end
+  def handle_event("keydown", %{"key" => "ArrowDown"}, socket) do
+    {:noreply, drop(socket.assigns.state, socket, :true)}
+  end
   def handle_event("keydown", %{"key" => " "}, socket) do
     {:noreply, rotate(:rotate, socket)}
   end
-  def handle_event("keydown", _, socket) do
-    {:noreply, socket}
+  def handle_event("start", _, socket) do
+    {:noreply, new_game(socket)}
+  end
+
+
+  def handle_info(:tick, socket) do
+    {:noreply, drop(socket.assigns.state, socket, :false)}
   end
 
   def x({x,y}) do

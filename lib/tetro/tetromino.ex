@@ -20,7 +20,7 @@ defmodule Tetro.Tetromino do
     rotation = random_rotation()
     %__MODULE__{
       shape: shape,
-      location: {1,1},
+      location: {3,-3},
       rotation: rotation
     }
   end

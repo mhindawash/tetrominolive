@@ -62,7 +62,7 @@ defmodule Tetro.Tetris do
       tetromino: new_tetromino,
       bottom: new_bottom,
       score: score(count),
-      gane_over: Bottom.collides?(new_bottom, prepare(new_tetromino))
+      game_over: Bottom.collides?(new_bottom, prepare(new_tetromino))
     }
   end
   def maybe_move_down(false=_notbottom, bottom, _old_tetromino, new_tetromino, _color) do

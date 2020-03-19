@@ -78,13 +78,15 @@
                         'Elixir.Phoenix.View',
                         'Elixir.Plug.Exception.Phoenix.ActionClauseError']},
               {registered,[]},
-              {vsn,"1.4.11"},
+              {vsn,"1.4.16"},
               {mod,{'Elixir.Phoenix',[]}},
-              {env,[{stacktrace_depth,nil},
+              {env,[{logger,true},
+                    {stacktrace_depth,nil},
                     {template_engines,[]},
                     {format_encoders,[]},
                     {filter_parameters,[<<"password">>]},
                     {serve_endpoints,false},
                     {gzippable_exts,[<<".js">>,<<".css">>,<<".txt">>,
                                      <<".text">>,<<".html">>,<<".json">>,
-                                     <<".svg">>,<<".eot">>,<<".ttf">>]}]}]}.
+                                     <<".svg">>,<<".eot">>,<<".ttf">>]},
+                    {trim_on_html_eex_engine,true}]}]}.
