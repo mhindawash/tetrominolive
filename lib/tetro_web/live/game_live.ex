@@ -1,13 +1,15 @@
 defmodule TetroWeb.GameLive do
   use Phoenix.LiveView
   import Phoenix.HTML, only: [raw: 1]
-  alias Tetro.{Tetromino, Points}
+  alias Tetro.{Tetromino, Points, Tetris}
 
   @box_width 20
   @box_height 20
 
   def mount(_session, socket) do
-      {:ok, new_game(socket) }
+    # :timer.send_interval 250, self(), :tick
+
+    {:ok, new_game(socket)}
   end
   def begin_svg() do
     """
@@ -17,8 +19,8 @@ defmodule TetroWeb.GameLive do
       id="Layer_1"
       xmlns="http://www.w3.org/2000/svg"
       xmlns:xlink="http://www.w3.org/1999/xlink"
-      width="300" height="400"
-      viewBox="0 0 300 400"
+      width="200" height="400"
+      viewBox="0 0 200 400"
       xml:space="preserve">
     """
   end
@@ -79,15 +81,13 @@ defmodule TetroWeb.GameLive do
           State: <%= @state %>
         </h2>
         <h2 style="color:white;"><%= inspect(@tetromino) %></h2>
-        <button phx-click="click">Start</button>
       </div>
-      <h1> Hello world </h1>
     """
   end
 
   def new_block(socket) do
     tetromino =
-      Tetro.Tetromino.random_brick
+      Tetromino.random_brick
       |> Map.put(:location, {3,-2})
 
       assign(socket,
@@ -101,8 +101,8 @@ defmodule TetroWeb.GameLive do
     points =
       tetromino
       |> Tetromino.prepare_points
-      |> Tetro.Points.move(tetromino.location)
-      |> Tetro.Points.with_color(color(tetromino))
+      |> Points.move(tetromino.location)
+      |> Points.with_color(color(tetromino))
 
     assign(socket, brick: points)
   end
@@ -155,6 +155,12 @@ defmodule TetroWeb.GameLive do
     :grey
   end
 
+  def drop(socket) do
+    socket
+    |> assign(tetromino: socket.assigns.tetromino |> Tetro.Tetromino.down)
+    |> show
+  end
+
   def move(direction, socket) do
     socket
     |> do_move(direction)
@@ -169,23 +175,19 @@ defmodule TetroWeb.GameLive do
 
   def do_rotate(socket, :rotate) do
     assign(socket, tetromino: socket.assigns.tetromino
-    |> Tetro.Tetris.try_spin_90(socket.assigns.bottom))
-  end
-  def do_move(socket, :down) do
-    assign(socket, tetromino: socket.assigns.tetromino
-    |> Tetro.Tetris.try_down(socket.assigns.bottom))
+    |> Tetris.try_spin_90(socket.assigns.bottom))
   end
   def do_move(socket, :left) do
     assign(socket, tetromino: socket.assigns.tetromino
-    |> Tetro.Tetris.try_left(socket.assigns.bottom))
+    |> Tetris.try_left(socket.assigns.bottom))
   end
   def do_move(socket, :right) do
     assign(socket, tetromino: socket.assigns.tetromino
-    |> Tetro.Tetris.try_right(socket.assigns.bottom))
+    |> Tetris.try_right(socket.assigns.bottom))
   end
 
   def handle_event("keydown", %{"key" => "ArrowDown"}, socket) do
-    {:noreply, move(:down, socket)}
+    {:noreply, drop(socket)}
   end
   def handle_event("keydown", %{"key" => "ArrowRight"}, socket) do
     {:noreply, move(:right, socket)}

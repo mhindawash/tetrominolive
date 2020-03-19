@@ -1,5 +1,5 @@
 defmodule Tetro.Tetris do
-  alias Tetro.{Tetromino, Bottom}
+  alias Tetro.{Tetromino, Bottom, Points}
 
   # def try_attempts(tetromino, f, points) do
   #   new_tetromino = f.(tetromino)
@@ -30,10 +30,65 @@ defmodule Tetro.Tetris do
   def prepare(tetromino) do
     tetromino
     |> Tetromino.prepare_points
-    |> Tetro.Points.move(tetromino.location)
+    |> Points.move(tetromino.location)
   end
 
-  def try_attempts(tetromino, bottom, f) do
+  def move_down(tetromino, bottom, color) do
+    new_tetromino =
+      Tetromino.down(tetromino)
+
+    maybe_move_down(
+      Bottom.collides?(bottom, prepare(new_tetromino)),
+      bottom,
+      tetromino,
+      new_tetromino,
+      color
+    )
+  end
+  def maybe_move_down(true=_bottom, bottom, old_tetromino, _new_tetromino, color) do
+      new_tetromino = Tetromino.random_brick()
+
+      points =
+        old_tetromino
+        |> prepare
+        |> Points.with_color(color)
+
+      {count, new_bottom} =
+        bottom
+        |> Bottom.merge(points)
+        |> Bottom.full_bottom_delete
+
+    %{
+      tetromino: new_tetromino,
+      bottom: new_bottom,
+      score: score(count),
+      gane_over: Bottom.collides?(new_bottom, prepare(new_tetromino))
+    }
+  end
+  def maybe_move_down(false=_notbottom, bottom, _old_tetromino, new_tetromino, _color) do
+    %{
+      tetromino: new_tetromino,
+      bottom: bottom,
+      score: 1,
+      game_over: false
+    }
+  end
+
+  def score(0), do: 0
+  def score(count) do
+    100 * round(:math.pow(2, count))
+  end
+
+  def try_left(tetromino, bottom) do
+    try_attempts(tetromino, bottom, &Tetromino.left/1)
+  end
+  def try_right(tetromino, bottom) do
+    try_attempts(tetromino, bottom, &Tetromino.right/1)
+  end
+  def try_spin_90(tetromino, bottom) do
+    try_attempts(tetromino, bottom, &Tetromino.rotation/1)
+  end
+  defp try_attempts(tetromino, bottom, f) do
     new_tetromino = f.(tetromino)
 
     if Bottom.collides?(bottom, prepare(new_tetromino)) do
@@ -41,47 +96,5 @@ defmodule Tetro.Tetris do
     else
       new_tetromino
     end
-  end
-  def move_down(tetromino, bottom) do
-    new_tetromino =
-      Tetro.Tetromino.down(tetromino)
-
-    maybe_move_down(
-      Bottom.collides?(bottom, prepare(new_tetromino)),
-      bottom,
-      tetromino,
-      new_tetromino
-    )
-  end
-  def maybe_move_down(true=_bottom, bottom, old_tetromino, _new_tetromino) do
-    points =
-      old_tetromino
-      |> prepare
-
-    %{
-      tetro: Tetro.Tetromino.random_brick,
-      bottom: Bottom.merge?(bottom, points),
-      score: 100,
-    }
-    # Tetro.Tetromino.random_brick()
-  end
-  def maybe_move_down(false=_notbottom, bottom, _old_tetromino, new_tetromino) do
-    %{
-      tetro: new_tetromino,
-      bottom: bottom,
-      score: 1
-    }
-  end
-  def try_left(tetromino, bottom) do
-    try_attempts(tetromino, bottom, &Tetromino.left/1)
-  end
-  def try_right(tetromino, bottom) do
-    try_attempts(tetromino, bottom, &Tetromino.right/1)
-  end
-  def try_down(tetromino, bottom) do
-    move_down(tetromino, bottom)
-  end
-  def try_spin_90(tetromino, bottom) do
-    try_attempts(tetromino, bottom, &Tetromino.rotation/1)
   end
 end

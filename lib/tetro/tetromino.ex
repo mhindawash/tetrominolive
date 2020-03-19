@@ -1,5 +1,9 @@
 defmodule Tetro.Tetromino do
-  defstruct [:shape, :location, :rotation]
+  defstruct [
+    shape: :i,
+    location: {40,0},
+    rotation: 0
+  ]
   alias Tetro.{Point, Plots, Points}
 
   def random_shape do
@@ -20,11 +24,12 @@ defmodule Tetro.Tetromino do
       rotation: rotation
     }
   end
+  def new(attributes \\ []), do: __struct__(attributes)
   def new_tetromino do #single piece of tetris for testing
     %__MODULE__{
       shape: :i,
       rotation: 90,
-      location: {3,1}
+      location: {1,0}
     }
   end
 
@@ -39,7 +44,6 @@ defmodule Tetro.Tetromino do
   end
   def rotation(tetromino) do #action to rotate the tetris piece
     %{tetromino| rotation: rotate(tetromino.rotation)}
-    |> IO.inspect(label: "************")
   end
   def rotate(270), do: 0
   # above code is the math to not rotate the tetris piece
@@ -48,7 +52,6 @@ defmodule Tetro.Tetromino do
   def prepare_points(tetromino) do
      #the steps to move all points not a single point
     tetromino.shape
-    # IO.inspect(tetromino.shape, label: "**************PP")
     |> Plots.points()
     |> Points.rotate(tetromino.rotation)
   end
