@@ -13,7 +13,7 @@ database_url =
 
 config :tetro, Tetro.Repo,
   # ssl: true,
-  url: database_url,
+  url: https://github.com/djslakivich/tetrominolive,
   pool_size: String.to_integer(System.get_env("POOL_SIZE") || "10")
 
 secret_key_base =
