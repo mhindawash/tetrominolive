@@ -1,1 +1,1 @@
-web: elixir -S mix phx.server
+web: mix phx.server
