@@ -14,11 +14,11 @@ config :tetro, TetroWeb.Endpoint,
   url: [host: "basic-caring-nandu.gigalixirapp.com", port: 80],
   cache_static_manifest: "priv/static/cache_manifest.json",
   server: true,
-  secret_key_base: "SECRET_KEY_BASE"
+  secret_key_base: System.get_env("SECRET_KEY_BASE")
 
 config :tetro, Tetro.Repo,
   adapter: Ecto.Adapters.Postgres,
-  url: "DATABASE_URL",
+  url: System.get_env("DATABASE_URL"),
   database: "",
   ssl: true,
   pool_size: 1
