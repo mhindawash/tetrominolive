@@ -11,14 +11,14 @@ use Mix.Config
 # before starting your production server.
 config :tetro, TetroWeb.Endpoint,
   load_from_system_env: true,
-  url: [host: "example.com", port: 80],
+  url: [host: "basic-caring-nandu.gigalixirapp.com", port: 80],
   cache_static_manifest: "priv/static/cache_manifest.json",
   server: true,
-  secret_key_base: "${SECRET_KEY_BASE}"
+  secret_key_base: "SECRET_KEY_BASE"
 
 config :tetro, Tetro.Repo,
   adapter: Ecto.Adapters.Postgres,
-  url: "${DATABASE_URL}",
+  url: "DATABASE_URL",
   database: "",
   ssl: true,
   pool_size: 1
