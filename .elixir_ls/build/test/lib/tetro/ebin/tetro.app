@@ -1,7 +1,7 @@
 {application,tetro,
              [{applications,[kernel,stdlib,elixir,logger,runtime_tools,
                              gettext,jason,phoenix_pubsub,postgrex,ecto_sql,
-                             phoenix_html,plug_cowboy,phoenix,
+                             distillery,phoenix_html,plug_cowboy,phoenix,
                              phoenix_live_view,phoenix_ecto]},
               {description,"tetro"},
               {modules,['Elixir.Tetro','Elixir.Tetro.Application',

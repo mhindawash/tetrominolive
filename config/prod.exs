@@ -18,7 +18,7 @@ config :tetro, TetroWeb.Endpoint,
 
 config :tetro, Tetro.Repo,
   adapter: Ecto.Adapters.Postgres,
-  url: "${DATABASE_URL}"
+  url: "${DATABASE_URL}",
   database: "",
   ssl: true,
   pool_size: 1
