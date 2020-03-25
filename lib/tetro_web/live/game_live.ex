@@ -83,7 +83,7 @@ defmodule TetroWeb.GameLive do
             <%= raw end_svg() %>
           </body>
         <div style="margin-left: 30px;">
-          <div style="margin-left: 27px;">
+          <div style="margin-left: 29px;">
             <div class="myButton" phx-click="arrow_up">
               ^
             </div>
@@ -91,10 +91,10 @@ defmodule TetroWeb.GameLive do
           <div class="myButton" phx-click="arrow_left">
             <
           </div>
-          <div style="margin-left: 8px;" class="myButton" phx-click="arrow_right">
+          <div style="margin-left: 18px;" class="myButton" phx-click="arrow_right">
             >
           </div>
-          <div style="margin-left: 28px;">
+          <div style="margin-left: 30px;">
             <div class="myButton" phx-click="arrow_down">
               v
             </div>
