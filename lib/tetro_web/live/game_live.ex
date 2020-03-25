@@ -94,7 +94,7 @@ defmodule TetroWeb.GameLive do
           <div style="margin-left: 18px;" class="myButton" phx-click="arrow_right">
             >
           </div>
-          <div style="margin-left: 30px;">
+          <div style="margin-left: 29px;">
             <div class="myButton" phx-click="arrow_down">
               v
             </div>
