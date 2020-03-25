@@ -13,7 +13,7 @@ defmodule TetroWeb.GameLive do
   end
   def begin_svg() do
     """
-    <div">
+    <div>
       <svg
       version="1.0"
       style="background-color: #d5eff7"
@@ -71,17 +71,23 @@ defmodule TetroWeb.GameLive do
 
   def render(%{state: :playing}=assigns) do
     ~L"""
-      <div phx-keydown="keydown" phx-target="window">
-      <h2 style="color: white;">
-        Score: <%= @score %>
-        State: <%= @state %>
-      </h2>
-        <body style="background-color:black;">
-          <%= raw begin_svg() %>
-          <%= raw boxes(@brick) %>
-          <%= raw boxes(Map.values(@bottom)) %>
-          <%= raw end_svg() %>
-        </body>
+        <div phx-keydown="keydown" phx-target="window">
+        <h2 style="color: white;">
+          Score: <%= @score %>
+          State: <%= @state %>
+        </h2>
+          <body style="background-color:black;">
+            <%= raw begin_svg() %>
+            <%= raw boxes(@brick) %>
+            <%= raw boxes(Map.values(@bottom)) %>
+            <%= raw end_svg() %>
+          </body>
+        <div>
+          <button phx-click="arrow_up">Rotate</button>
+          <button phx-click="arrow_left">Left</button>
+          <button phx-click="arrow_right">Right</button>
+          <button phx-click="arrow_down">DROP!</button>
+        </div>
       </div>
     """
   end
@@ -98,7 +104,7 @@ defmodule TetroWeb.GameLive do
       <h1 style="color: white;"> Game Over </h1>
       <h2 style="color: white;"> You're score: <%= @score %></h2>
       <body style="background-color:black;">
-      <button phx-click="start">Play Again!</button
+      <button phx-click="start">Play Again!</button>
       </body>
     """
   end
@@ -199,6 +205,35 @@ defmodule TetroWeb.GameLive do
   end
   def drop(_not_playing, socket, _not_fast), do: socket
 
+  # Web Code Above
+  # -------------------------------------------------
+  # Mobile Code Beneath
+
+  def drop_mobile(:playing, socket, fast) do
+    old_tetromino = socket.assigns.tetromino
+
+    response =
+      Tetris.move_down(
+      old_tetromino,
+      socket.assigns.bottom,
+      color(old_tetromino))
+
+    bonus = if fast, do: 2, else: 0
+
+    socket
+    |> assign(
+      tetromino: response.tetromino,
+      bottom: response.bottom,
+      score: socket.assigns.score + response.score + bonus,
+      state: (if response.game_over, do: :game_over, else: :playing)
+      )
+    |> show
+  end
+  def drop_mobile(_not_playing, socket, _not_fast), do: socket
+
+  # Mobile Code Above
+  # -------------------------------------------------
+  # Web Code Beneath
 
   def move(direction, socket) do
     socket
@@ -206,11 +241,39 @@ defmodule TetroWeb.GameLive do
     |> show
   end
 
+  # Web Code Above
+  # -------------------------------------------------
+  # Mobile Code Beneath
+
+  def move_mobile(direction, socket) do
+    socket
+    |> do_move_mobile(direction)
+    |> show
+  end
+
+  # Mobile Code Above
+  # -------------------------------------------------
+  # Web Code Beneath
+
   def rotate(degrees, socket) do
     socket
     |> do_rotate(degrees)
     |> show
   end
+
+  # Web Code Above
+  # -------------------------------------------------
+  # Mobile Code Beneath
+
+  def rotate_mobile(degrees, socket) do
+    socket
+    |> do_rotate_mobile(degrees)
+    |> show
+  end
+
+  # Mobile Code Above
+  # -------------------------------------------------
+  # Web Code Beneath
 
   def do_rotate(socket, :rotate) do
     assign(socket, tetromino: socket.assigns.tetromino
@@ -225,6 +288,44 @@ defmodule TetroWeb.GameLive do
     |> Tetris.try_right(socket.assigns.bottom))
   end
 
+  # Web Code Above
+  # -------------------------------------------------
+  # Mobile Code Beneath
+
+  def do_rotate_mobile(socket, :rotate) do
+    assign(socket, tetromino: socket.assigns.tetromino
+    |> Tetris.try_spin_90(socket.assigns.bottom))
+  end
+  def do_move_mobile(socket, :left) do
+    assign(socket, tetromino: socket.assigns.tetromino
+    |> Tetris.try_left(socket.assigns.bottom))
+  end
+  def do_move_mobile(socket, :right) do
+    assign(socket, tetromino: socket.assigns.tetromino
+    |> Tetris.try_right(socket.assigns.bottom))
+  end
+
+  # Mobile Code Above
+  # -------------------------------------------------
+  # Web Code Beneath
+
+  def handle_event("arrow_right", _arrow_right, socket) do
+    {:noreply, move_mobile(:right, socket)}
+  end
+  def handle_event("arrow_left", _arrow_left, socket) do
+    {:noreply, move_mobile(:left, socket)}
+  end
+  def handle_event("arrow_down", _arrow_down, socket) do
+    {:noreply, drop(socket.assigns.state, socket, :true)}
+  end
+  def handle_event("arrow_up", _arrow_up, socket) do
+    {:noreply, rotate(:rotate, socket)}
+  end
+
+  # Web Code Above
+  # -------------------------------------------------
+  # Mobile Code Beneath
+
   def handle_event("keydown", %{"key" => "ArrowRight"}, socket) do
     {:noreply, move(:right, socket)}
   end
@@ -232,15 +333,15 @@ defmodule TetroWeb.GameLive do
     {:noreply, move(:left, socket)}
   end
   def handle_event("keydown", %{"key" => "ArrowDown"}, socket) do
-    {:noreply, drop(socket.assigns.state, socket, :true)}
+    {:noreply, drop_mobile(socket.assigns.state, socket, :true)}
   end
-  def handle_event("keydown", %{"key" => " "}, socket) do
-    {:noreply, rotate(:rotate, socket)}
+  def handle_event("keydown", %{"key" => "ArrowUp"}, socket) do
+    {:noreply, rotate_mobile(:rotate, socket)}
   end
+
   def handle_event("start", _, socket) do
     {:noreply, new_game(socket)}
   end
-
 
   def handle_info(:tick, socket) do
     {:noreply, drop(socket.assigns.state, socket, :false)}
