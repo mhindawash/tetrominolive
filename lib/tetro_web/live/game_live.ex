@@ -7,13 +7,13 @@ defmodule TetroWeb.GameLive do
   @box_height 20
 
   def mount(_session, socket) do
-    :timer.send_interval 250, self(), :tick
+    :timer.send_interval 400, self(), :tick
 
     {:ok, start_game(socket)}
   end
   def begin_svg() do
     """
-    <div>
+    <div style="display: inline;">
       <svg
       version="1.0"
       style="background-color: #d5eff7"
@@ -82,7 +82,7 @@ defmodule TetroWeb.GameLive do
             <%= raw boxes(Map.values(@bottom)) %>
             <%= raw end_svg() %>
           </body>
-        <div style="margin-left: 30px;">
+        <div style="margin-left: 30px; display: inline-block;">
           <div style="margin-left: 29px;">
             <div class="myButton" phx-click="arrow_up">
               ^
