@@ -84,18 +84,18 @@ defmodule TetroWeb.GameLive do
           </body>
         <div style="margin-left: 30px;">
           <div style="margin-left: 29px;">
-            <div class="myButton" phx-click="arrow_up">
+            <div class="myButton" phx-click="ArrowUp">
               ^
             </div>
           </div>
-          <div class="myButton" phx-click="arrow_left">
+          <div class="myButton" phx-click="ArrowLeft">
             <
           </div>
-          <div style="margin-left: 18px;" class="myButton" phx-click="arrow_right">
+          <div style="margin-left: 18px;" class="myButton" phx-click="ArrowRight">
             >
           </div>
           <div style="margin-left: 29px;">
-            <div class="myButton" phx-click="arrow_down">
+            <div class="myButton" phx-click="ArrowDown">
               v
             </div>
           </div>
@@ -242,25 +242,6 @@ defmodule TetroWeb.GameLive do
     |> Tetris.try_right(socket.assigns.bottom))
   end
 
-  # -------------------------------------------------
-  # Button Code For Mobile Beneath
-
-  def handle_event("arrow_right", _arrow_right, socket) do
-    {:noreply, move(:right, socket)}
-  end
-  def handle_event("arrow_left", _arrow_left, socket) do
-    {:noreply, move(:left, socket)}
-  end
-  def handle_event("arrow_down", _arrow_down, socket) do
-    {:noreply, drop(socket.assigns.state, socket, :true)}
-  end
-  def handle_event("arrow_up", _arrow_up, socket) do
-    {:noreply, rotate(:rotate, socket)}
-  end
-
-  # -------------------------------------------------
-  # ArrowKey code for Web on PC
-
   def handle_event("keydown", %{"key" => "ArrowRight"}, socket) do
     {:noreply, move(:right, socket)}
   end
@@ -272,6 +253,9 @@ defmodule TetroWeb.GameLive do
   end
   def handle_event("keydown", %{"key" => "ArrowUp"}, socket) do
     {:noreply, rotate(:rotate, socket)}
+  end
+  def handle_event("keydown", _, socket) do
+    {:noreply, socket}
   end
 
   def handle_event("start", _, socket) do
