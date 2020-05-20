@@ -157,43 +157,19 @@ defmodule TetroWeb.GameLive do
     |> show
   end
 
-  defp shades(:red) do
-    %{light: "DB7160", dark: "AB574B"}
-  end
-  defp shades(:blue) do
-    %{light: "83C1C8", dark: "66969C"}
-  end
-  defp shades(:green) do
-    %{light: "8BBF57", dark: "769359"}
-  end
-  defp shades(:orange) do
-    %{light: "CB8E4E", dark: "AC7842"}
-  end
-  defp shades(:grey) do
-    %{light: "A1A09E", dark: "7F7F7E"}
-  end
+  defp shades(:red), do: %{light: "DB7160", dark: "AB574B"}
+  defp shades(:blue), do: %{light: "83C1C8", dark: "66969C"}
+  defp shades(:grey), do: %{light: "A1A09E", dark: "7F7F7E"}
+  defp shades(:green), do: %{light: "8BBF57", dark: "769359"}
+  defp shades(:orange), do: %{light: "CB8E4E", dark: "AC7842"}
 
-  defp color(%{shape: :t}) do
-    :red
-  end
-  defp color(%{shape: :i}) do
-    :blue
-  end
-  defp color(%{shape: :l}) do
-    :green
-  end
-  defp color(%{shape: :j}) do
-    :green
-  end
-  defp color(%{shape: :o}) do
-    :orange
-  end
-  defp color(%{shape: :z}) do
-    :grey
-  end
-  defp color(%{shape: :s}) do
-    :grey
-  end
+  defp color(%{shape: :t}), do: :red
+  defp color(%{shape: :i}), do: :blue
+  defp color(%{shape: :z}), do: :grey
+  defp color(%{shape: :s}), do: :grey
+  defp color(%{shape: :l}), do: :green
+  defp color(%{shape: :j}), do: :green
+  defp color(%{shape: :o}), do: :orange
 
   def drop(:playing, socket, fast) do
     old_tetromino = socket.assigns.tetromino
